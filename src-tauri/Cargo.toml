@@ -1,0 +1,15 @@
+[package]
+name = "dragon-elf-music-player"
+version = "1.0.0"
+description = "A fantasy themed local music player"
+authors = ["Your Name"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.5", features = ["dialog-open", "fs-read-dir", "fs-read-file", "path-all"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+walkdir = "2.4.0"
