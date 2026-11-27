@@ -1,5 +1,64 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
+use serde::{Deserialize, Serialize};
+use std::fs;
+use std::path::Path;
+use walkdir::WalkDir;
+
+// --- C++ FFI BRIDGE ---
+// Define the C++ struct in Rust so they match exactly in memory
+#[repr(C)]
+pub struct AudioSettings {
+    pub bass_boost: f32,
+    pub eq_low: f32,
+    pub eq_mid: f32,
+    pub eq_high: f32,
+}
+
+// Link to the C++ functions
+extern "C" {
+    fn process_audio_buffer(buffer: *mut f32, num_samples: i32, settings: AudioSettings);
+    fn get_engine_version() -> i32;
+}
+
+// Tauri command to get C++ engine version
+#[tauri::command]
+fn check_audio_engine() -> String {
+    let version = unsafe { get_engine_version() };
+    format!("DSP Engine v{}.{}.{}", version / 100, (version % 100) / 10, version % 10)
+}
+
+// Tauri command to process audio (simulation)
+#[tauri::command]
+fn apply_audio_effects(samples: Vec<f32>, bass: f32, low: f32, mid: f32, high: f32) -> Vec<f32> {
+    let mut buffer = samples;
+    let settings = AudioSettings {
+        bass_boost: bass,
+        eq_low: low,
+        eq_mid: mid,
+        eq_high: high,
+    };
+
+    // Call the C++ function safely
+    unsafe {
+        process_audio_buffer(buffer.as_mut_ptr(), buffer.len() as i32, settings);
+    }
+
+    buffer
+}
+
+// ... (Keep your existing Song struct and read_music_folder function here) ...
+
+fn main() {
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![
+            read_music_folder,
+            check_audio_engine,
+            apply_audio_effects
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+    }// Prevents additional console window on Windows in release, DO NOT REMOVE!
 
 use serde::{Deserialize, Serialize};
 use std::fs;
