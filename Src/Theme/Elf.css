@@ -1,0 +1,514 @@
+/* =========================================
+   ELF THEME - Forest & Magic
+   ========================================= */
+
+body.elf {
+  --bg-main: #05100a;
+  --bg-panel: rgba(10, 25, 15, 0.85);
+  --text-main: #e0f7e9;
+  --text-muted: #7ba88e;
+  --accent-primary: #00ff88; /* Jade Green */
+  --accent-secondary: #ffd700; /* Gold */
+  --accent-glow: rgba(0, 255, 136, 0.4);
+  --border-color: #1a4a2e;
+  --border-glow: rgba(0, 255, 136, 0.3);
+  --font-family: 'Cinzel', 'Trajan Pro', serif; 
+}
+
+/* Base Container */
+.elf .app-container {
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, #0a2015 0%, var(--bg-main) 100%);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  overflow: hidden;
+  position: relative;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: inset 0 0 50px rgba(0, 255, 136, 0.1);
+}
+
+/* Magic Leaf Edge Effect */
+.elf .app-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  border-radius: 12px;
+  box-shadow: 
+    inset 0 0 20px var(--accent-primary),
+    inset 0 0 40px var(--accent-glow);
+  z-index: 10;
+}
+
+/* Elf Silhouette Placeholder (Top Center) */
+.elf .player-header {
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  position: relative;
+  z-index: 20;
+  -webkit-app-region: drag; 
+}
+
+.elf .player-header::before {
+  content: '🧝‍♀️';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 60px;
+  filter: drop-shadow(0 0 15px var(--accent-primary));
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.elf .logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--accent-secondary);
+  text-shadow: 0 0 10px var(--accent-primary);
+  letter-spacing: 2px;
+}
+
+.elf .theme-toggle-btn {
+  background: linear-gradient(135deg, #0a4a2a, #00ff88);
+  color: #000;
+  border: 1px solid var(--accent-secondary);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px var(--accent-glow);
+  -webkit-app-region: no-drag;
+}
+
+.elf .theme-toggle-btn:hover {
+  box-shadow: 0 0 20px var(--accent-primary);
+  transform: scale(1.05);
+}
+
+/* Main Layout */
+.elf .main-content {
+  display: flex;
+  height: calc(100% - 80px);
+  padding: 20px;
+  gap: 20px;
+  z-index: 5;
+  position: relative;
+}
+
+/* Left Panel (Player) */
+.elf .left-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 255, 136, 0.05);
+  backdrop-filter: blur(5px);
+}
+
+/* Album Art */
+.elf .album-art-container {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-primary);
+  box-shadow: 0 0 30px var(--accent-glow), inset 0 0 20px rgba(0,0,0,0.8);
+  overflow: hidden;
+  margin-bottom: 25px;
+  position: relative;
+  background: #111;
+}
+
+.elf .album-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.elf .default-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  background: radial-gradient(circle, #0a2a15, #000);
+  color: var(--accent-primary);
+  text-shadow: 0 0 20px var(--accent-primary);
+}
+
+/* Song Info */
+.elf .song-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.elf .song-title {
+  font-size: 22px;
+  color: var(--accent-secondary);
+  margin: 0 0 5px 0;
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+.elf .song-artist {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* Progress Bar */
+.elf .progress-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.elf .time {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 40px;
+  text-align: center;
+}
+
+.elf .progress-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: #0a2a15;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #1a4a2e;
+}
+
+.elf .progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #ffd700);
+  border-radius: 3px;
+  position: relative;
+  box-shadow: 0 0 10px var(--accent-primary);
+}
+
+.elf .progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: -3px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-secondary);
+  opacity: 0;
+}
+
+.elf .progress-bar-bg:hover .progress-bar-fill::after {
+  opacity: 1;
+}
+
+/* Controls */
+.elf .controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.elf .icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.elf .icon-btn:hover {
+  color: var(--accent-primary);
+  filter: drop-shadow(0 0 5px var(--accent-primary));
+}
+
+.elf .icon-btn.active {
+  color: var(--accent-secondary);
+  filter: drop-shadow(0 0 5px var(--accent-secondary));
+}
+
+.elf .play-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0a4a2a, #00ff88);
+  border: 2px solid var(--accent-secondary);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 20px var(--accent-glow);
+  transition: all 0.3s ease;
+}
+
+.elf .play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px var(--accent-primary);
+}
+
+.elf .repeat-one-dot {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 10px;
+  background: var(--accent-primary);
+  color: #000;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Bottom Controls */
+.elf .bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.elf .folder-btn {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid var(--border-color);
+  color: var(--accent-secondary);
+  padding: 8px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.elf .folder-btn:hover {
+  background: rgba(0, 255, 136, 0.2);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.elf .volume-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+}
+
+.elf .volume-slider {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 4px;
+  background: #0a2a15;
+  border-radius: 2px;
+  outline: none;
+}
+
+.elf .volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  box-shadow: 0 0 5px var(--accent-primary);
+}
+
+/* Right Panel (Playlist) */
+.elf .right-panel {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 255, 136, 0.05);
+  backdrop-filter: blur(5px);
+}
+
+.elf .playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.elf .search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0a1a10;
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: var(--text-muted);
+}
+
+.elf .search-box input {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  outline: none;
+  font-family: sans-serif;
+}
+
+.elf .song-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: sans-serif;
+}
+
+.elf .playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Custom Scrollbar */
+.elf .playlist-list::-webkit-scrollbar {
+  width: 8px;
+}
+.elf .playlist-list::-webkit-scrollbar-track {
+  background: #0a1a10;
+}
+.elf .playlist-list::-webkit-scrollbar-thumb {
+  background: #1a4a2e;
+  border-radius: 4px;
+}
+.elf .playlist-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+.elf .playlist-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+
+.elf .playlist-item:hover {
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.elf .playlist-item.playing {
+  background: linear-gradient(90deg, rgba(0, 255, 136, 0.15), transparent);
+  border-left: 3px solid var(--accent-primary);
+}
+
+.elf .song-indicator {
+  width: 30px;
+  color: var(--text-muted);
+  font-family: monospace;
+  display: flex;
+  justify-content: center;
+}
+
+.elf .playlist-item.playing .song-indicator {
+  color: var(--accent-secondary);
+}
+
+.elf .song-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  overflow: hidden;
+}
+
+.elf .song-details .title {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.elf .song-details .artist {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: sans-serif;
+}
+
+.elf .song-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.elf .fav-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.elf .fav-btn:hover,
+.elf .fav-btn.is-fav {
+  color: #ffd700;
+  filter: drop-shadow(0 0 5px #ffd700);
+}
+
+.elf .duration {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.elf .empty-playlist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-family: sans-serif;
+  text-align: center;
+  gap: 15px;
+}
+
+/* Magic Glow Animation */
+@keyframes pulse-magic {
+  0% { box-shadow: 0 0 10px var(--accent-glow); }
+  50% { box-shadow: 0 0 25px var(--accent-primary), 0 0 40px var(--accent-secondary); }
+  100% { box-shadow: 0 0 10px var(--accent-glow); }
+}
+
+.elf .play-btn {
+  animation: pulse-magic 3s infinite alternate;
+  }
