@@ -1,4 +1,124 @@
 import { useState, useEffect, useRef } from 'react';
+// 1. Add these imports and states
+import { Settings, Sliders } from 'lucide-react'; // Add Settings icon
+
+// Inside your App component:
+const [showEQ, setShowEQ] = useState(false);
+const [bassBoost, setBassBoost] = useState(0);
+const [eqLow, setEqLow] = useState(0);
+const [eqMid, setEqMid] = useState(0);
+const [eqHigh, setEqHigh] = useState(0);
+
+// Web Audio API Refs
+const audioContextRef = useRef(null);
+const bassFilterRef = useRef(null);
+const eqLowRef = useRef(null);
+const eqMidRef = useRef(null);
+const eqHighRef = useRef(null);
+const sourceNodeRef = useRef(null);
+
+// 2. Initialize Web Audio API when a song plays
+useEffect(() => {
+  const audio = audioRef.current;
+  if (!audio) return;
+
+  // Only initialize once
+  if (!audioContextRef.current) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioContextRef.current = new AudioContext();
+    
+    // Create nodes
+    sourceNodeRef.current = audioContextRef.current.createMediaElementSource(audio);
+    bassFilterRef.current = audioContextRef.current.createBiquadFilter();
+    eqLowRef.current = audioContextRef.current.createBiquadFilter();
+    eqMidRef.current = audioContextRef.current.createBiquadFilter();
+    eqHighRef.current = audioContextRef.current.createBiquadFilter();
+
+    // Configure filters
+    bassFilterRef.current.type = 'lowshelf';
+    bassFilterRef.current.frequency.value = 200;
+
+    eqLowRef.current.type = 'peaking';
+    eqLowRef.current.frequency.value = 250;
+    eqLowRef.current.Q.value = 1;
+
+    eqMidRef.current.type = 'peaking';
+    eqMidRef.current.frequency.value = 1000;
+    eqMidRef.current.Q.value = 1;
+
+    eqHighRef.current.type = 'peaking';
+    eqHighRef.current.frequency.value = 4000;
+    eqHighRef.current.Q.value = 1;
+
+    // Connect the chain: Source -> Bass -> EQ -> Destination
+    sourceNodeRef.current
+      .connect(bassFilterRef.current)
+      .connect(eqLowRef.current)
+      .connect(eqMidRef.current)
+      .connect(eqHighRef.current)
+      .connect(audioContextRef.current.destination);
+  }
+}, []);
+
+// 3. Update filter values when sliders move
+useEffect(() => {
+  if (bassFilterRef.current) bassFilterRef.current.gain.value = bassBoost;
+  if (eqLowRef.current) eqLowRef.current.gain.value = eqLow;
+  if (eqMidRef.current) eqMidRef.current.gain.value = eqMid;
+  if (eqHighRef.current) eqHighRef.current.gain.value = eqHigh;
+}, [bassBoost, eqLow, eqMid, eqHigh]);
+
+// 4. Add the UI inside your `bottom-controls` div
+<div className="bottom-controls">
+  <button className="folder-btn" onClick={handleOpenFolder}>
+    <FolderOpen size={18} /> Open Folder
+  </button>
+  
+  {/* New EQ Button */}
+  <button 
+    className={`folder-btn ${showEQ ? 'active' : ''}`} 
+    onClick={() => setShowEQ(!showEQ)}
+  >
+    <Sliders size={18} /> EQ & Bass
+  </button>
+
+  <div className="volume-control">
+    <Volume2 size={18} />
+    <input 
+      type="range" min="0" max="1" step="0.01" 
+      value={volume} 
+      onChange={(e) => setVolume(parseFloat(e.target.value))}
+      className="volume-slider"
+    />
+  </div>
+</div>
+
+{/* EQ Panel Overlay */}
+{showEQ && (
+  <div className="eq-panel">
+    <h3>Bass & EQ</h3>
+    <div className="eq-row">
+      <label>Bass Boost</label>
+      <input type="range" min="0" max="15" value={bassBoost} onChange={(e) => setBassBoost(Number(e.target.value))} />
+      <span>{bassBoost} dB</span>
+    </div>
+    <div className="eq-row">
+      <label>Low</label>
+      <input type="range" min="-12" max="12" value={eqLow} onChange={(e) => setEqLow(Number(e.target.value))} />
+      <span>{eqLow} dB</span>
+    </div>
+    <div className="eq-row">
+      <label>Mid</label>
+      <input type="range" min="-12" max="12" value={eqMid} onChange={(e) => setEqMid(Number(e.target.value))} />
+      <span>{eqMid} dB</span>
+    </div>
+    <div className="eq-row">
+      <label>High</label>
+      <input type="range" min="-12" max="12" value={eqHigh} onChange={(e) => setEqHigh(Number(e.target.value))} />
+      <span>{eqHigh} dB</span>
+    </div>
+  </div>
+)}
 import { invoke } from '@tauri-apps/api/tauri';
 import { open } from '@tauri-apps/api/dialog';
 import { convertFileSrc } from '@tauri-apps/api/tauri';
