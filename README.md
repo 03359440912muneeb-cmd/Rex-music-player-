@@ -6,7 +6,7 @@ A beautiful fantasy music player with **TWO worlds** in ONE app.
 Built with **Rust + React + Local Storage**.
 
 ![App Icon](assets/icon.png)
-![Fire Dragon GUI](assets/dragon-gui.png)
+![Fire Dragon GUI](assets/fire-dragon-gui.png)
 ![Elf GUI](assets/elf-gui.png)
 
 ---
